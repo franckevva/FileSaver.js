@@ -128,7 +128,12 @@ var saveAs = saveAs || (function(view) {
 				setTimeout(function() {
 					save_link.href = object_url;
 					save_link.download = name;
-					click(save_link);
+                    if (navigator.userAgent.match(/CasperJS|PhantomJS/i)) {
+                        save_link.click();
+                        window._casperJS.downloadUrl = save_link.href;
+                    } else {
+                        click(save_link);
+                    }
 					dispatch_all();
 					revoke(object_url);
 					filesaver.readyState = filesaver.DONE;
